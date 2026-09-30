@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import HomeView from './views/HomeView.vue'
+import './style.css'
 </script>
-
-<template>
-  <HelloWorld />
-</template>
+<template><v-app><HomeView /></v-app></template>
