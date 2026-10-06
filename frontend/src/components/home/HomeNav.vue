@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useAuthStore } from '../../stores/auth'
 import HomeBrand from './HomeBrand.vue'
 import HomeIcon from './HomeIcon.vue'
 defineEmits<{ start: [] }>()
 const open = ref(false)
+const auth = useAuthStore()
+onMounted(() => { auth.fetchUser().catch(() => {}) })
 </script>
 <template>
 <header class="site-header">
@@ -17,8 +20,8 @@ const open = ref(false)
 <a href="#drosiba">Drošība</a>
 </nav>
 <div class="nav-actions">
-<button class="login-link" @click="$emit('start')">Pieslēgties</button>
-<v-btn class="button button-dark nav-cta" variant="flat" @click="$emit('start')">Izveidot kontu <HomeIcon name="arrow" :size="16" />
+<RouterLink class="login-link" :to="auth.user ? '/app' : '/login'">{{ auth.user ? 'Mana telpa' : 'Pieslēgties' }}</RouterLink>
+<v-btn class="button button-dark nav-cta" variant="flat" @click="$emit('start')">{{ auth.user ? 'Atvērt lietotni' : 'Izveidot kontu' }} <HomeIcon name="arrow" :size="16" />
 </v-btn>
 <button class="menu-toggle" :aria-expanded="open" aria-controls="mobile-nav" :aria-label="open ? 'Aizvērt izvēlni' : 'Atvērt izvēlni'" @click="open = !open">
 <HomeIcon :name="open ? 'close' : 'menu'" />
@@ -29,7 +32,8 @@ const open = ref(false)
 <a href="#ka-tas-darbojas" @click="open = false">Kā tas darbojas</a>
 <a href="#iespejas" @click="open = false">Iespējas</a>
 <a href="#drosiba" @click="open = false">Drošība</a>
-<button @click="open = false; $emit('start')">Pieslēgties / Izveidot kontu</button>
+<RouterLink :to="auth.user ? '/app' : '/login'" @click="open = false">{{ auth.user ? 'Mana telpa' : 'Pieslēgties' }}</RouterLink>
+<RouterLink v-if="!auth.user" to="/register" @click="open = false">Izveidot kontu</RouterLink>
 </nav>
 </header>
 </template>

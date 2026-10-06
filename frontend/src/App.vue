@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import HomeView from './views/HomeView.vue'
-import './style.css'
+import "./style.css";
+import "./application.css";
 </script>
-<template><v-app><HomeView /></v-app></template>
+<template>
+  <v-app><RouterView /></v-app>
+</template>

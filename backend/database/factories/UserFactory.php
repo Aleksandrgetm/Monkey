@@ -25,8 +25,14 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => fake()->unique()->lexify('User????????'),
+            'email' => fake()->unique()->lexify('????????@example.com'),
+            'role' => 0,
+            'status' => 1,
+            'email_notifications' => true,
+            'in_app_notifications' => true,
+            'reminder_days' => null,
+            'appearance' => 'system',
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
@@ -36,6 +42,16 @@ class UserFactory extends Factory
     /**
      * Indicate that the model's email address should be unverified.
      */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes): array => ['role' => 1]);
+    }
+
+    public function blocked(): static
+    {
+        return $this->state(fn (array $attributes): array => ['status' => 0]);
+    }
+
     public function unverified(): static
     {
         return $this->state(fn (array $attributes) => [
